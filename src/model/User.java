@@ -1,6 +1,5 @@
 package model;
 import java.io.Serializable;
-import java.util.Collection;
 
 /**
  * 用户的model，保存用户的相关信息

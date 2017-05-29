@@ -1,15 +1,16 @@
 package ui;
 import dao.NoteDao;
+import dao.PaperDao;
 import dao.UserDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.Note;
+import model.Paper;
 import model.User;
 
 import java.util.LinkedList;
@@ -35,6 +36,12 @@ public class Controller
 	public TableColumn<?, ?> tcu_id;
 	public TableColumn<?, ?> tcu_username;
 	public TableColumn<?, ?> tcu_password;
+	//paper
+	public TextField tfp_id;
+	public TextField tfp_title;
+	public TableView<Paper> tb_paper;
+	public TableColumn<?, ?> tcp_id;
+	public TableColumn<?, ?> tcp_title;
 	
 	
 	//note
@@ -308,6 +315,116 @@ public class Controller
 		tcu_password.setCellValueFactory(new PropertyValueFactory<>("password"));
 		tcu_username.setCellValueFactory(new PropertyValueFactory<>("username"));
 		tb_user.setItems(result);
+	}
+	//paper
+	public void initPaper() throws Exception
+	{
+		//language=MySQL
+		String sql = "SELECT * FROM paper;";
+		PaperDao dao = new PaperDao();
+		ObservableList<Paper> result = FXCollections.observableList(dao.query(sql));
+		tcp_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tcp_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+		tb_paper.setItems(result);
+	}
+	public void queryPaper(MouseEvent mouseEvent) throws Exception
+	{
+		//language=MySQL
+		StringBuilder sql = new StringBuilder("SELECT * FROM paper");
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfp_title.getText().length() > 0)
+			cons.add("title like '" + tfp_title.getText() + "'");
+		if (tfp_id.getText().matches("\\d+"))
+			cons.add("id=" + tfp_id.getText());
+		if (cons.size() > 0)
+			sql.append(" WHERE ");
+		for (int i = 0; i < cons.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" AND ");
+			sql.append(cons.get(i));
+		}
+		sql.append(';');
+		PaperDao dao = new PaperDao();
+		ObservableList<Paper> result = FXCollections.observableList(dao.query(sql.toString()));
+		tcp_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tcp_title.setCellValueFactory(new PropertyValueFactory<>("title"));
+		tb_paper.setItems(result);
+	}
+	public void editPaper(MouseEvent mouseEvent) throws Exception
+	{
+		StringBuilder sql = new StringBuilder("UPDATE paper");
+		if (!tfp_id.getText().matches("\\d+"))
+			return;
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfp_title.getText().length() > 0)
+			cons.add("title='" + tfp_title.getText() + "'");
+		if (cons.size() > 0)
+		{
+			sql.append(" SET ");
+			for (int i = 0; i < cons.size(); i++)
+			{
+				if (i != 0)
+					sql.append(" , ");
+				sql.append(cons.get(i));
+			}
+			sql.append("where id=").append(tfp_id.getText()).append(';');
+			PaperDao dao = new PaperDao();
+			dao.update(sql.toString());
+		}
+		initPaper();
+	}
+	public void delPaper(MouseEvent mouseEvent) throws Exception
+	{
+		//language=MySQL
+		StringBuilder sql = new StringBuilder("DELETE FROM paper");
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfp_title.getText().length() > 0)
+			cons.add("title like '" + tfp_title.getText() + "'");
+		if (tfp_id.getText().matches("\\d+"))
+			cons.add("id=" + tfp_id.getText());
+		if (cons.size() > 0)
+		{
+			sql.append(" WHERE ");
+			for (int i = 0; i < cons.size(); i++)
+			{
+				if (i != 0)
+					sql.append(" AND ");
+				sql.append(cons.get(i));
+			}
+			sql.append(';');
+			PaperDao dao = new PaperDao();
+			dao.update(sql.toString());
+		}
+		initPaper();
+	}
+	public void addPaper(MouseEvent mouseEvent) throws Exception
+	{
+		StringBuilder sql = new StringBuilder("INSERT INTO paper(");
+		LinkedList<String> keys = new LinkedList<>();
+		LinkedList<String> values = new LinkedList<>();
+		if (tfp_title.getText().length() > 0)
+		{
+			keys.add("title");
+			values.add("'" + tfp_title.getText() + "'");
+		}
+		for (int i = 0; i < keys.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" , ");
+			sql.append(keys.get(i));
+		}
+		sql.append(") VALUES (");
+		for (int i = 0; i < values.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" , ");
+			sql.append(values.get(i));
+		}
+		sql.append(");");
+		PaperDao dao = new PaperDao();
+		dao.update(sql.toString());
+		initPaper();
 	}
 	
 }
