@@ -1,10 +1,8 @@
 package dao;
 
-import model.Data;
 import model.Log;
 
-import java.sql.*;
-import java.util.Collection;
+import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 public class LogDao extends Dao
@@ -28,7 +26,6 @@ public class LogDao extends Dao
 			log.setOperatorid(rs.getInt("operatorid"));
 			log.setTarget(rs.getInt("target"));
 			log.setTargetid(rs.getInt("targetid"));
-			log.setTime(rs.getTimestamp("time"));
 			log.setType(rs.getInt("type"));
 			result.add(log);
 		}

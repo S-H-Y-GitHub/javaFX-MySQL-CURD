@@ -1,8 +1,5 @@
 package ui;
-import dao.NoteDao;
-import dao.PaperDao;
-import dao.UserDao;
-import dao.UserPaperDao;
+import dao.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -10,10 +7,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import model.Note;
-import model.Paper;
-import model.User;
-import model.UserPaper;
+import model.*;
 
 import java.util.LinkedList;
 public class Controller
@@ -52,6 +46,16 @@ public class Controller
 	public TableColumn<?, ?> tcup_id;
 	public TableColumn<?, ?> tcup_uid;
 	public TableColumn<?, ?> tcup_pid;
+	//log
+	public TextField tfl_id;
+	public TextField tfl_type;
+	public TextField tfl_targetid;
+	public TextField tfl_operatorid;
+	public TableView<Log> tb_log;
+	public TableColumn<?, ?> tcl_id;
+	public TableColumn<?, ?> tcl_type;
+	public TableColumn<?, ?> tcl_targetid;
+	public TableColumn<?, ?> tcl_operatorid;
 	
 	
 	//note
@@ -558,6 +562,141 @@ public class Controller
 			dao.update(sql.toString());
 		}
 		initUserPaper();
+	}
+	//log
+	public void initLog() throws Exception
+	{
+		String sql = "SELECT * FROM log;";
+		LogDao dao = new LogDao();
+		ObservableList<Log> result = FXCollections.observableList(dao.query(sql));
+		tcl_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tcl_type.setCellValueFactory(new PropertyValueFactory<>("type"));
+		tcl_targetid.setCellValueFactory(new PropertyValueFactory<>("targetid"));
+		tcl_operatorid.setCellValueFactory(new PropertyValueFactory<>("operatorid"));
+		tb_log.setItems(result);
+	}
+	public void queryLog(MouseEvent mouseEvent) throws Exception
+	{
+		//language=MySQL
+		StringBuilder sql = new StringBuilder("SELECT * FROM log");
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfl_id.getText().matches("\\d+"))
+			cons.add("id=" + tfl_id.getText());
+		if (tfl_type.getText().matches("\\d+"))
+			cons.add("type=" + tfl_type.getText());
+		if (tfl_targetid.getText().matches("\\d+"))
+			cons.add("targetid=" + tfl_targetid.getText());
+		if (tfl_operatorid.getText().matches("\\d+"))
+			cons.add("operatorid=" + tfl_operatorid.getText());
+		if (cons.size() > 0)
+			sql.append(" WHERE ");
+		for (int i = 0; i < cons.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" AND ");
+			sql.append(cons.get(i));
+		}
+		sql.append(';');
+		LogDao dao = new LogDao();
+		ObservableList<Log> result = FXCollections.observableList(dao.query(sql.toString()));
+		tcl_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tcl_type.setCellValueFactory(new PropertyValueFactory<>("type"));
+		tcl_targetid.setCellValueFactory(new PropertyValueFactory<>("targetid"));
+		tcl_operatorid.setCellValueFactory(new PropertyValueFactory<>("operatorid"));
+		tb_log.setItems(result);
+	}
+	public void addLog(MouseEvent mouseEvent) throws Exception
+	{
+		StringBuilder sql = new StringBuilder("INSERT INTO log(");
+		LinkedList<String> keys = new LinkedList<>();
+		LinkedList<String> values = new LinkedList<>();
+		if (tfl_type.getText().matches("\\d+"))
+		{
+			keys.add("type");
+			values.add(tfl_type.getText());
+		}
+		if (tfl_targetid.getText().matches("\\d+"))
+		{
+			keys.add("targetid");
+			values.add(tfl_targetid.getText());
+		}
+		if (tfl_operatorid.getText().matches("\\d+"))
+		{
+			keys.add("operatorid");
+			values.add(tfl_operatorid.getText());
+		}
+		for (int i = 0; i < keys.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" , ");
+			sql.append(keys.get(i));
+		}
+		sql.append(") VALUES (");
+		for (int i = 0; i < values.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" , ");
+			sql.append(values.get(i));
+		}
+		sql.append(");");
+		LogDao dao = new LogDao();
+		dao.update(sql.toString());
+		initLog();
+	}
+	public void delLog(MouseEvent mouseEvent) throws Exception
+	{
+		//language=MySQL
+		StringBuilder sql = new StringBuilder("DELETE FROM log");
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfl_id.getText().matches("\\d+"))
+			cons.add("id=" + tfl_id.getText());
+		if (tfl_type.getText().matches("\\d+"))
+			cons.add("type=" + tfl_type.getText());
+		if (tfl_targetid.getText().matches("\\d+"))
+			cons.add("targetid=" + tfl_targetid.getText());
+		if (tfl_operatorid.getText().matches("\\d+"))
+			cons.add("operatorid=" + tfl_operatorid.getText());
+		if (cons.size() > 0)
+		{
+			sql.append(" WHERE ");
+			for (int i = 0; i < cons.size(); i++)
+			{
+				if (i != 0)
+					sql.append(" AND ");
+				sql.append(cons.get(i));
+			}
+			sql.append(';');
+			LogDao dao = new LogDao();
+			dao.update(sql.toString());
+		}
+		initLog();
+	}
+	public void editLog(MouseEvent mouseEvent) throws Exception
+	{
+		StringBuilder sql = new StringBuilder("UPDATE log");
+		if (!tfl_id.getText().matches("\\d+"))
+			return;
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfl_type.getText().matches("\\d+"))
+			cons.add("type=" + tfl_type.getText());
+		if (tfl_targetid.getText().matches("\\d+"))
+			cons.add("targetid=" + tfl_targetid.getText());
+		if (tfl_operatorid.getText().matches("\\d+"))
+			cons.add("operatorid=" + tfl_operatorid.getText());
+		if (cons.size() > 0)
+		{
+			sql.append(" SET ");
+			for (int i = 0; i < cons.size(); i++)
+			{
+				if (i != 0)
+					sql.append(" , ");
+				sql.append(cons.get(i));
+			}
+			sql.append("where id=").append(tfl_id.getText()).append(';');
+			LogDao dao = new LogDao();
+			dao.update(sql.toString());
+		}
+		initLog();
 	}
 	
 }

@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-import java.util.Date;
 public class Log implements Serializable
 {
 	//操作对象
@@ -20,8 +19,6 @@ public class Log implements Serializable
 	public static final int UPDATETREELABLE = 8;
 	
 	private int id;
-	private Date time;
-	private Boolean isPrivate;
 	private int target;
 	private int targetid;
 	private int type;
@@ -35,22 +32,6 @@ public class Log implements Serializable
 	public void setId(int id)
 	{
 		this.id = id;
-	}
-	public Date getTime()
-	{
-		return time;
-	}
-	public void setTime(Date time)
-	{
-		this.time = time;
-	}
-	public Boolean getPrivate()
-	{
-		return isPrivate;
-	}
-	public void setPrivate(Boolean aPrivate)
-	{
-		isPrivate = aPrivate;
 	}
 	public int getTarget()
 	{
