@@ -16,7 +16,7 @@ public class LogDao extends Dao
 	}
 	
 	@Override
-	public List query(String sql) throws Exception
+	public List<Log> query(String sql) throws Exception
 	{
 		ResultSet rs = stmt.executeQuery(sql);
 		List<Log> result = new LinkedList<>();

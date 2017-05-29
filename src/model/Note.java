@@ -7,20 +7,9 @@ public class Note implements Serializable
 	private int id;
 	private int author;
 	private int paper;
-	private Date publishTime;
 	private String title;
 	private String content;
-	private Boolean isPrivate;
 	
-	
-	public Date getPublishTime()
-	{
-		return publishTime;
-	}
-	public void setPublishTime(Date pubiishTime)
-	{
-		this.publishTime = pubiishTime;
-	}
 	public int getId()
 	{
 		return id;
@@ -28,14 +17,6 @@ public class Note implements Serializable
 	public void setId(int id)
 	{
 		this.id = id;
-	}
-	public Boolean getPrivate()
-	{
-		return isPrivate;
-	}
-	public void setPrivate(Boolean aPrivate)
-	{
-		isPrivate = aPrivate;
 	}
 	public String getTitle()
 	{

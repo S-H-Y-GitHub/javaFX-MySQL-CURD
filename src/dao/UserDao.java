@@ -12,7 +12,7 @@ public class UserDao extends Dao
 		super();
 	}
 	@Override
-	public List query(String sql) throws Exception
+	public List<User> query(String sql) throws Exception
 	{
 		ResultSet rs = stmt.executeQuery(sql);
 		List<User> result = new LinkedList<>();

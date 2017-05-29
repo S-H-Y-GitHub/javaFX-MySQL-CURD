@@ -13,7 +13,7 @@ public class NoteDao extends Dao
 	}
 	
 	@Override
-	public List query(String sql) throws Exception
+	public List<Note> query(String sql) throws Exception
 	{
 		ResultSet rs = stmt.executeQuery(sql);
 		List<Note> result = new LinkedList<>();
@@ -25,7 +25,6 @@ public class NoteDao extends Dao
 			note.setAuthor(rs.getInt("author"));
 			note.setPaper(rs.getInt("paper"));
 			note.setTitle(rs.getString("title"));
-			note.setPublishTime(rs.getDate("publishtime"));
 			note.setContent(rs.getString("content"));
 			result.add(note);
 		}

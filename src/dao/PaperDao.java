@@ -15,7 +15,7 @@ public class PaperDao extends Dao
 	}
 	
 	@Override
-	public List query(String sql) throws Exception
+	public List<Paper> query(String sql) throws Exception
 	{
 		ResultSet rs = stmt.executeQuery(sql);
 		List<Paper> result = new LinkedList<>();

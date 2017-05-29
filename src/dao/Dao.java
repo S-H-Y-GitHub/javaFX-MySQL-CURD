@@ -16,7 +16,7 @@ public abstract class Dao
 	public Dao() throws Exception
 	{
 		Class.forName("com.mysql.jdbc.Driver");
-		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/papermanage", "root", "coding");
+		conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/papermanage?useSSL=false", "root", "coding");
 		stmt = conn.createStatement();
 	}
 	abstract public List query(String sql) throws Exception;
