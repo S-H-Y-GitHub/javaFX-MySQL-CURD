@@ -2,6 +2,7 @@ package ui;
 import dao.NoteDao;
 import dao.PaperDao;
 import dao.UserDao;
+import dao.UserPaperDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
@@ -12,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import model.Note;
 import model.Paper;
 import model.User;
+import model.UserPaper;
 
 import java.util.LinkedList;
 public class Controller
@@ -42,6 +44,14 @@ public class Controller
 	public TableView<Paper> tb_paper;
 	public TableColumn<?, ?> tcp_id;
 	public TableColumn<?, ?> tcp_title;
+	//userpaper
+	public TextField tfup_id;
+	public TextField tfup_user;
+	public TextField tfup_paper;
+	public TableView<UserPaper> tb_up;
+	public TableColumn<?, ?> tcup_id;
+	public TableColumn<?, ?> tcup_uid;
+	public TableColumn<?, ?> tcup_pid;
 	
 	
 	//note
@@ -425,6 +435,129 @@ public class Controller
 		PaperDao dao = new PaperDao();
 		dao.update(sql.toString());
 		initPaper();
+	}
+	//userpaper
+	public void initUserPaper() throws Exception
+	{
+		//language=MySQL
+		String sql = "SELECT * FROM user_paper_tree;";
+		UserPaperDao dao = new UserPaperDao();
+		ObservableList<UserPaper> result = FXCollections.observableList(dao.query(sql));
+		tcup_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tcup_uid.setCellValueFactory(new PropertyValueFactory<>("userId"));
+		tcup_pid.setCellValueFactory(new PropertyValueFactory<>("paperId"));
+		tb_up.setItems(result);
+	}
+	public void queryUP(MouseEvent mouseEvent) throws Exception
+	{
+		//language=MySQL
+		StringBuilder sql = new StringBuilder("SELECT * FROM user_paper_tree");
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfup_user.getText().matches("\\d+"))
+			cons.add("user_id=" + tfup_user.getText());
+		if (tfup_paper.getText().matches("\\d+"))
+			cons.add("paper_id=" + tfup_paper.getText());
+		if (tfup_id.getText().matches("\\d+"))
+			cons.add("id=" + tfup_id.getText());
+		if (cons.size() > 0)
+			sql.append(" WHERE ");
+		for (int i = 0; i < cons.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" AND ");
+			sql.append(cons.get(i));
+		}
+		sql.append(';');
+		UserPaperDao dao = new UserPaperDao();
+		ObservableList<UserPaper> result = FXCollections.observableList(dao.query(sql.toString()));
+		tcup_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tcup_uid.setCellValueFactory(new PropertyValueFactory<>("userId"));
+		tcup_pid.setCellValueFactory(new PropertyValueFactory<>("paperId"));
+		tb_up.setItems(result);
+	}
+	public void addUP(MouseEvent mouseEvent) throws Exception
+	{
+		StringBuilder sql = new StringBuilder("INSERT INTO user_paper_tree(");
+		LinkedList<String> keys = new LinkedList<>();
+		LinkedList<String> values = new LinkedList<>();
+		if (tfup_user.getText().matches("\\d+"))
+		{
+			keys.add("user_id");
+			values.add(tfup_user.getText());
+		}
+		if (tfup_paper.getText().matches("\\d+"))
+		{
+			keys.add("paper_id");
+			values.add(tfup_paper.getText());
+		}
+		for (int i = 0; i < keys.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" , ");
+			sql.append(keys.get(i));
+		}
+		sql.append(") VALUES (");
+		for (int i = 0; i < values.size(); i++)
+		{
+			if (i != 0)
+				sql.append(" , ");
+			sql.append(values.get(i));
+		}
+		sql.append(");");
+		UserPaperDao dao = new UserPaperDao();
+		dao.update(sql.toString());
+		initUserPaper();
+	}
+	public void delUP(MouseEvent mouseEvent) throws Exception
+	{
+		//language=MySQL
+		StringBuilder sql = new StringBuilder("DELETE FROM user_paper_tree");
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfup_user.getText().matches("\\d+"))
+			cons.add("user_id=" + tfup_user.getText());
+		if (tfup_paper.getText().matches("\\d+"))
+			cons.add("paper_id=" + tfup_paper.getText());
+		if (tfup_id.getText().matches("\\d+"))
+			cons.add("id=" + tfup_id.getText());
+		if (cons.size() > 0)
+		{
+			sql.append(" WHERE ");
+			for (int i = 0; i < cons.size(); i++)
+			{
+				if (i != 0)
+					sql.append(" AND ");
+				sql.append(cons.get(i));
+			}
+			sql.append(';');
+			UserPaperDao dao = new UserPaperDao();
+			dao.update(sql.toString());
+		}
+		initUserPaper();
+	}
+	public void editUP(MouseEvent mouseEvent) throws Exception
+	{
+		StringBuilder sql = new StringBuilder("UPDATE user_paper_tree");
+		if (!tfup_id.getText().matches("\\d+"))
+			return;
+		LinkedList<String> cons = new LinkedList<>();
+		if (tfup_user.getText().matches("\\d+"))
+			cons.add("user_id=" + tfup_user.getText());
+		if (tfup_paper.getText().matches("\\d+"))
+			cons.add("paper_id=" + tfup_paper.getText());
+		if (cons.size() > 0)
+		{
+			sql.append(" SET ");
+			for (int i = 0; i < cons.size(); i++)
+			{
+				if (i != 0)
+					sql.append(" , ");
+				sql.append(cons.get(i));
+			}
+			sql.append("where id=").append(tfup_id.getText()).append(';');
+			UserPaperDao dao = new UserPaperDao();
+			dao.update(sql.toString());
+		}
+		initUserPaper();
 	}
 	
 }
