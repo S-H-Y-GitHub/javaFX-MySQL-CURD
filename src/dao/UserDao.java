@@ -23,11 +23,6 @@ public class UserDao extends Dao
 			user.setUsername(rs.getString("username"));
 			user.setPassword(rs.getString("password"));
 			user.setId(rs.getInt("id"));
-			user.setBio(rs.getString("bio"));
-			user.setBlogURL(rs.getString("blogURL"));
-			user.setImgURI(rs.getString("imgURI"));
-			user.setEmail(rs.getString("email"));
-			user.setName(rs.getString("name"));
 			result.add(user);
 		}
 		rs.close();
