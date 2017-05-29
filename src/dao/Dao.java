@@ -20,7 +20,7 @@ public abstract class Dao
 		stmt = conn.createStatement();
 	}
 	abstract public List query(String sql) throws Exception;
-	public int change(String sql) throws Exception
+	public int update(String sql) throws Exception
 	{
 		return stmt.executeUpdate(sql);
 	}
