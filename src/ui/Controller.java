@@ -201,7 +201,7 @@ public class Controller
 					sql.append(" , ");
 				sql.append(cons.get(i));
 			}
-			sql.append("where id=").append(tfn_id.getText()).append(';');
+			sql.append(" where id=").append(tfn_id.getText()).append(';');
 			NoteDao dao = new NoteDao();
 			dao.update(sql.toString());
 		}
@@ -297,7 +297,7 @@ public class Controller
 					sql.append(" , ");
 				sql.append(cons.get(i));
 			}
-			sql.append("where id=").append(tfu_id.getText()).append(';');
+			sql.append(" where id=").append(tfu_id.getText()).append(';');
 			UserDao dao = new UserDao();
 			dao.update(sql.toString());
 		}
@@ -382,7 +382,7 @@ public class Controller
 					sql.append(" , ");
 				sql.append(cons.get(i));
 			}
-			sql.append("where id=").append(tfp_id.getText()).append(';');
+			sql.append(" where id=").append(tfp_id.getText()).append(';');
 			PaperDao dao = new PaperDao();
 			dao.update(sql.toString());
 		}
@@ -557,7 +557,7 @@ public class Controller
 					sql.append(" , ");
 				sql.append(cons.get(i));
 			}
-			sql.append("where id=").append(tfup_id.getText()).append(';');
+			sql.append(" where id=").append(tfup_id.getText()).append(';');
 			UserPaperDao dao = new UserPaperDao();
 			dao.update(sql.toString());
 		}
@@ -692,7 +692,7 @@ public class Controller
 					sql.append(" , ");
 				sql.append(cons.get(i));
 			}
-			sql.append("where id=").append(tfl_id.getText()).append(';');
+			sql.append(" where id=").append(tfl_id.getText()).append(';');
 			LogDao dao = new LogDao();
 			dao.update(sql.toString());
 		}
