@@ -1,11 +1,8 @@
 package dao;
-import model.Data;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Dao
